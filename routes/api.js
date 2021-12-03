@@ -1,7 +1,5 @@
-//const express = require('express');
-//const fetch = require('node-fetch');
-import express from 'express';
-import { fetchData } from '../helpers/useAddress.js';
+const express = require('express');
+const fetchData = require('../helpers/useAddress');
 
 const router = express.Router();
 
@@ -11,4 +9,4 @@ router.get('/url', async function (req, res) {
     res.send(data);
 });
 
-export default router;
+module.exports = router;

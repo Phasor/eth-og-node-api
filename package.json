@@ -1,6 +1,5 @@
 {
   "name": "eth-og-api",
-  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,12 +9,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.24.0",
     "canvas": "^2.8.0",
     "dotenv": "^10.0.0",
     "ethers": "^5.5.1",
     "express": "^4.17.1",
-    "nft.storage": "^5.0.0",
-    "node-fetch": "^3.1.0"
+    "nft.storage": "^5.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

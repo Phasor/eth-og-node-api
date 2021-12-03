@@ -1,16 +1,16 @@
-import express from 'express';
-//const routes = require('./routes/api');
-import routes from './routes/api.js'
-
-//pull in environment variables
-//require('dotenv').config();
-import dotenv from 'dotenv';
+const express = require('express');
+const routes = require('./routes/api.js')
+const dotenv = require('dotenv');
 
 // set up express app
 const app = express();
 
+//setup static files path
+app.use(express.static('public'));
+
 // initialize routes
 app.use('/api', routes);
+
 
 // listen for requests
 app.listen(process.env.port || 4000, function () {

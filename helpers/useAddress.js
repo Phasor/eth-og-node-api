@@ -1,6 +1,11 @@
-import { ethers, utils } from 'ethers';
-import dotenv from 'dotenv';
-import fetch from 'node-fetch';
+const { ethers, utils } = require('ethers');
+const dotenv = require('dotenv');
+const axios = require('axios').default;
+const createImage = require('./createImage.js');
+const uploadMetaData = require('./useUploader.js');
+const fs = require('fs');
+const path = require('path');
+
 
 //pull in .env variables
 dotenv.config();
@@ -21,9 +26,9 @@ async function createSignature(blockNumber) {
     //console.log("Expected:" + expectedAddress);
     //Expected: 0x14791697260E4c9A71f18484C9f997B308e59325
 
-    const result = { signature: joinedSignature, hashedMessage: hash };
+    //const result = { signature: joinedSignature };
     //console.log(result);
-    return result;
+    return joinedSignature;
 }
 
 //returns first year the eth address transacted with eth
@@ -70,11 +75,11 @@ function getFirstYear(blockNumber) {
     }
 }
 
-export async function fetchData(account) {
+async function fetchData(account) {
     try {
         const api_url = createEtherscanURL(account)
-        const response = await fetch(api_url);
-        const firstTransaction = await response.json();
+        const response = await axios.get(api_url);
+        const firstTransaction = await response.data;
         const firstBlock = firstTransaction.result[0].blockNumber;
         const firstYear = getFirstYear(parseFloat(firstBlock));
 
@@ -82,11 +87,28 @@ export async function fetchData(account) {
         const dateObj = new Date((firstTransaction.result[0].timeStamp) * 1000);
         const humanDate = dateObj.toDateString();
 
+        //create and upload image to IPFS
+        const imageBlob = await createImage(450, 450, humanDate, account);
+        //const finalImage = await fs.promises.readFile(path.resolve(__dirname, '../public/images/image.png'));
+
+        const url = await uploadMetaData(
+            `NameTest`,
+            'A cool description of this item',
+            imageBlob,
+            [
+                {
+                    "display_type": "date",
+                    "trait_type": "Year",
+                    "value": firstYear
+                }
+            ],
+        );
+
         //create crypto signature
-        const data = await createSignature(firstBlock);
+        const signature = await createSignature(firstBlock);
         //const actualAddress = utils.verifyMessage(firstBlock, sig);
         //console.log("Actual:" + actualAddress);
-        return { firstBlock: firstBlock, firstYear: firstYear, date: humanDate, signature: data.signature, hash: data.hashedMessage }
+        return { firstBlock: firstBlock, firstYear: firstYear, date: humanDate, url: url, signature: signature }
     }
     catch (err) {
         console.log(err)
@@ -109,3 +131,6 @@ function createEtherscanURL(account) {
 
     return etherscanURL;
 }
+
+module.exports = fetchData;
+
