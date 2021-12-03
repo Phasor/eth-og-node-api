@@ -17,7 +17,7 @@ async function uploadMetaData(_name, _description, _image, _atributes) {
             attributes: _atributes,
         })
 
-        console.log('IPFS URL for the metadata:', metadata.url);
+        console.log('Metadata URL:', metadata.url);
         metadataURL = metadata.url;
         return metadata.url;
     }

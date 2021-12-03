@@ -11,12 +11,12 @@ const path = require('path');
 dotenv.config();
 
 //creates crypto signature for this block number using local private key
-async function createSignature(blockNumber) {
+async function createSignature(URL) {
     //create new signing key
     const signingKey = new ethers.utils.SigningKey(process.env.PRIVATE_KEY);
 
     //computes the KECCAK256 hash of the text bytes.
-    const hash = ethers.utils.id(blockNumber);
+    const hash = ethers.utils.id(URL);
 
     //sign the hashed message
     const signature = signingKey.signDigest(hash);
@@ -104,8 +104,10 @@ async function fetchData(account) {
             ],
         );
 
+        console.log('URL:' + url);
+
         //create crypto signature
-        const signature = await createSignature(firstBlock);
+        const signature = await createSignature(url);
         //const actualAddress = utils.verifyMessage(firstBlock, sig);
         //console.log("Actual:" + actualAddress);
         return { firstBlock: firstBlock, firstYear: firstYear, date: humanDate, url: url, signature: signature }
