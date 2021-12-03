@@ -3,10 +3,8 @@ pragma solidity >=0.7.0 <0.9.0;
 
 contract verify {
 
-///public address of the private key used to produce the signature on the correct API
 address apiAddress = 0x14791697260E4c9A71f18484C9f997B308e59325;
 
-//helper function 
     function splitSignature(bytes memory sig) pure public returns (uint8 v, bytes32 r, bytes32 s)
     {
         require(sig.length == 65);
@@ -23,7 +21,6 @@ address apiAddress = 0x14791697260E4c9A71f18484C9f997B308e59325;
         return (v, r, s);
     }
 
-///check if the message supplied was provided by the correct API using the cryptographic signature
     function checkSigner(string memory unhashedMessage, bytes memory sig) view public returns (bool)
     {
         ///hash the input message

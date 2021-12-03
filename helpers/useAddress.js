@@ -3,14 +3,14 @@ const dotenv = require('dotenv');
 const axios = require('axios').default;
 const createImage = require('./createImage.js');
 const uploadMetaData = require('./useUploader.js');
-const fs = require('fs');
-const path = require('path');
-
+//const fs = require('fs');
+//const path = require('path');
 
 //pull in .env variables
 dotenv.config();
 
-//creates crypto signature for this block number using local private key
+//creates crypto signature for the input using local private key from the API. 
+//Proves metadata URL was produced by the API and not faked 
 async function createSignature(URL) {
     //create new signing key
     const signingKey = new ethers.utils.SigningKey(process.env.PRIVATE_KEY);
@@ -26,15 +26,12 @@ async function createSignature(URL) {
     //console.log("Expected:" + expectedAddress);
     //Expected: 0x14791697260E4c9A71f18484C9f997B308e59325
 
-    //const result = { signature: joinedSignature };
-    //console.log(result);
     return joinedSignature;
 }
 
 //returns first year the eth address transacted with eth
 function getFirstYear(blockNumber) {
-
-    //mainnet
+    //mainnet numbers
     // if (blockNumber < 778483) {
     //     setFirstYear(2015);
     // }
@@ -57,7 +54,7 @@ function getFirstYear(blockNumber) {
     //     setFirstYear(2021);
     // }
 
-    //Rinkeby
+    //Rinkeby block numbers
     if (blockNumber < 1513019) {
         return '2017';
     }
@@ -104,9 +101,7 @@ async function fetchData(account) {
             ],
         );
 
-        console.log('URL:' + url);
-
-        //create crypto signature
+        //create crypto signature to prove API produced the metadata URL
         const signature = await createSignature(url);
         //const actualAddress = utils.verifyMessage(firstBlock, sig);
         //console.log("Actual:" + actualAddress);
