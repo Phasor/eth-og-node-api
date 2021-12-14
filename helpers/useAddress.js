@@ -11,12 +11,12 @@ dotenv.config();
 
 //creates crypto signature for the input using local private key from the API. 
 //Proves metadata URL was produced by the API and not faked 
-async function createSignature(URL) {
+async function createSignature(message) {
     //create new signing key
     const signingKey = new ethers.utils.SigningKey(process.env.PRIVATE_KEY);
 
     //computes the KECCAK256 hash of the text bytes.
-    const hash = ethers.utils.id(URL);
+    const hash = ethers.utils.id(message);
 
     //sign the hashed message
     const signature = signingKey.signDigest(hash);
@@ -89,12 +89,11 @@ async function fetchData(account) {
         //const finalImage = await fs.promises.readFile(path.resolve(__dirname, '../public/images/image.png'));
 
         const url = await uploadMetaData(
-            `NameTest`,
-            'A cool description of this item',
+            `Eth OG`,
+            'An NFT to prove when the holder first transacted on Ethereum.',
             imageBuffer,
             [
                 {
-                    "display_type": "date",
                     "trait_type": "Year",
                     "value": firstYear
                 }
@@ -102,10 +101,11 @@ async function fetchData(account) {
         );
 
         //create crypto signature to prove API produced the metadata URL
-        const signature = await createSignature(url);
+        const message = firstYear + url
+        const signature = await createSignature(message);
         //const actualAddress = utils.verifyMessage(firstBlock, sig);
         //console.log("Actual:" + actualAddress);
-        return { firstBlock: firstBlock, firstYear: firstYear, url: url, signature: signature, image: imageBuffer }
+        return { firstBlock: firstBlock, firstYear: firstYear, url: url, signature: signature, message: message, image: imageBuffer }
     }
     catch (err) {
         console.log(err)
