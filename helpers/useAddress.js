@@ -81,17 +81,17 @@ async function fetchData(account) {
         const firstYear = getFirstYear(parseFloat(firstBlock));
 
         //get date of transaction
-        const dateObj = new Date((firstTransaction.result[0].timeStamp) * 1000);
-        const humanDate = dateObj.toDateString();
+        //const dateObj = new Date((firstTransaction.result[0].timeStamp) * 1000);
+        //const humanDate = dateObj.toDateString();
 
         //create and upload image to IPFS
-        const imageBlob = await createImage(450, 450, humanDate, account);
+        const imageBuffer = await createImage(450, 450, firstYear, account);
         //const finalImage = await fs.promises.readFile(path.resolve(__dirname, '../public/images/image.png'));
 
         const url = await uploadMetaData(
             `NameTest`,
             'A cool description of this item',
-            imageBlob,
+            imageBuffer,
             [
                 {
                     "display_type": "date",
@@ -105,7 +105,7 @@ async function fetchData(account) {
         const signature = await createSignature(url);
         //const actualAddress = utils.verifyMessage(firstBlock, sig);
         //console.log("Actual:" + actualAddress);
-        return { firstBlock: firstBlock, firstYear: firstYear, date: humanDate, url: url, signature: signature }
+        return { firstBlock: firstBlock, firstYear: firstYear, url: url, signature: signature, image: imageBuffer }
     }
     catch (err) {
         console.log(err)

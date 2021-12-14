@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const routes = require('./routes/api.js')
 const dotenv = require('dotenv');
 
@@ -7,6 +8,9 @@ const app = express();
 
 //setup static files path
 app.use(express.static('public'));
+
+//enable cors
+app.use(cors());
 
 // initialize routes
 app.use('/api', routes);

@@ -1,9 +1,10 @@
 const express = require('express');
+const cors = require('cors');
 const fetchData = require('../helpers/useAddress');
 
 const router = express.Router();
 
-router.get('/url', async function (req, res) {
+router.get('/url', cors(), async function (req, res) {
     const account = req.query.add;
     const key = req.query.key;
     if (key == process.env.THIS_API_KEY) {
