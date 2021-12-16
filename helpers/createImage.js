@@ -7,7 +7,7 @@ async function createImage(width, height, firstYear, account) {
     const context = myCanvas.getContext('2d');
     var myImage = null;
 
-    //draw date && address over the top of base image
+    //select image based on first year
     switch (firstYear) {
         case '2015':
             myImage = await loadImage(path.resolve(__dirname, '../public/images/2015.jpg'));

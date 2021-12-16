@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const routes = require('./routes/api.js')
 const dotenv = require('dotenv');
+const helmet = require('helmet');
 
 // set up express app
 const app = express();
@@ -11,6 +12,9 @@ app.use(express.static('public'));
 
 //enable cors
 app.use(cors());
+
+//enable Helmet for security
+app.use(helmet());
 
 // initialize routes
 app.use('/api', routes);
