@@ -20,6 +20,4 @@ app.use(helmet());
 app.use('/api', routes);
 
 // listen for requests
-app.listen(process.env.port || 4000, function () {
-    console.log('now listening for requests on port 4000');
-});
+app.listen(process.env.PORT || 4000);
